@@ -10,8 +10,5 @@ set(HEADER_FILE)
 # Targets
 add_library(${PROJECT_NAME} OBJECT ${SOURCE_FILES} ${HEADER_FILE})
 
-# Likage
-target_link_libraries(${PROJECT_NAME} ezsrv_app)
-
 # Install destination
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
