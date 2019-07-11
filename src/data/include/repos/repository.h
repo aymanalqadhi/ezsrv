@@ -1,10 +1,10 @@
-#ifndef EZNOT_DATA_REPOS_REPOSITORY_H
-#define EZNOT_DATA_REPOS_REPOSITORY_H
+#ifndef EZSRV_DATA_REPOS_REPOSITORY_H
+#define EZSRV_DATA_REPOS_REPOSITORY_H
 
 #include <functional>
 #include <vector>
 
-namespace eznot::data {
+namespace ezsrv::data::repos {
     template <typename TModel>
     class repository_base {
       public:
@@ -21,6 +21,6 @@ namespace eznot::data {
         virtual bool remove(std::uint32_t id);
         virtual bool remove(std::function<bool(const TModel &)> pred);
     };
-} // namespace eznot::data
+} // namespace ezsrv::data
 
-#endif /* end of include guard: EZNOT_DATA_REPOS_REPOSITORY_H */
+#endif /* end of include guard: EZSRV_DATA_REPOS_REPOSITORY_H */
