@@ -25,7 +25,7 @@ namespace ezsrv::data::models {
     class client {
       public:
         client() = default;
-        client(const std::uint32_t id) : id_(id) {}
+        explicit client(const std::uint32_t id) : id_(id) {}
 
         inline const std::uint32_t id() const noexcept { return id_; }
         inline const client_type   type() const noexcept { return type_; }
