@@ -13,13 +13,13 @@ namespace ezsrv::config {
 
     namespace defaults {
         constexpr std::uint16_t listen_port {3434};
-        constexpr std::uint8_t  verbosity {0};
+        constexpr std::uint16_t  verbosity {0};
     } // namespace defaults
 
     struct app_config {
         const std::string   executable;
         const std::uint16_t listen_port;
-        const std::uint8_t  verbosity;
+        const std::uint16_t  verbosity;
 
         static app_config from_command_line(int argc, const char *argv[]);
         static app_config from_config_file(const std::string &path);
