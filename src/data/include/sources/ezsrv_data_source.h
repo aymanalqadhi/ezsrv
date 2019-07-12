@@ -14,7 +14,7 @@ namespace ezsrv::data::sources {
         using repository = ezsrv::data::repos::repository_base<TModel>;
 
       public:
-        virtual std::shared_ptr<repository<client>> clients_repository();
+        virtual std::shared_ptr<repository<client>> clients_repository() = 0;
     };
 } // namespace ezsrv::data::sources
 
