@@ -1,8 +1,8 @@
 #ifndef EZSRV_DATA_SOURCES_MEMORY_EZSRV_DATA_SOURCE_H
 #define EZSRV_DATA_SOURCES_MEMORY_EZSRV_DATA_SOURCE_H
 
-#include "repos/memory_clients_repository.h"
-#include "sources/ezsrv_data_source.h"
+#include "data/repos/memory_clients_repository.h"
+#include "data/sources/ezsrv_data_source.h"
 
 namespace ezsrv::data::sources {
     class memory_ezsrv_data_source : public ezsrv_data_source_base {

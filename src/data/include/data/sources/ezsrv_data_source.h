@@ -1,8 +1,8 @@
 #ifndef EZSRV_DATA_SOURCES_EZSRV_DATA_SOURCE_H
 #define EZSRV_DATA_SOURCES_EZSRV_DATA_SOURCE_H
 
-#include "models/client.h"
-#include "repos/repository.h"
+#include "data/models/client.h"
+#include "data/repos/repository.h"
 
 #include <memory>
 

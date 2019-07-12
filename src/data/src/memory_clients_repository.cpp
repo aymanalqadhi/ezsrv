@@ -1,6 +1,6 @@
-#include "repos/memory_clients_repository.h"
+#include "data/repos/memory_clients_repository.h"
 
-#include "models/client.h"
+#include "data/models/client.h"
 
 #include <vector>
 
