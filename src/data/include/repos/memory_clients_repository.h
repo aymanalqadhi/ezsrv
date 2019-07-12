@@ -16,9 +16,9 @@ namespace ezsrv::data::repos {
         bool add(const std::vector<client> &items) override;
 
         bool get(std::uint32_t id, client& out) override;
-        std::vector<client> get_all() override;
         std::vector<client> get(
             std::function<bool(const client &)> pred) override;
+        std::vector<client> get_all() override;
 
         bool update(const client &item) override;
 
