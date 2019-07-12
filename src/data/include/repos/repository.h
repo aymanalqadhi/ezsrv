@@ -11,15 +11,17 @@ namespace ezsrv::data::repos {
         virtual bool add(const TModel &item);
         virtual bool add(const std::vector<TModel> &items);
 
-        virtual std::vector<TModel> get_all();
-        virtual std::vector<TModel> get(std::uint32_t id);
+        virtual bool get(std::uint32_t id, TModel& out);
         virtual std::vector<TModel> get(
             std::function<bool(const TModel &)> pred);
+        virtual std::vector<TModel> get_all();
 
         virtual bool update(const TModel &item);
 
         virtual bool remove(std::uint32_t id);
         virtual bool remove(std::function<bool(const TModel &)> pred);
+
+        virtual std::uint64_t count();
     };
 } // namespace ezsrv::data
 

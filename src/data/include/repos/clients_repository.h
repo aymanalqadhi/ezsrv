@@ -9,13 +9,14 @@ namespace ezsrv::data::repos {
         : public repository_base<ezsrv::data::models::client> {
         using client = ezsrv::data::models::client;
 
+      public:
         bool add(const client &item) override;
         bool add(const std::vector<client> &items) override;
 
-        std::vector<client> get_all() override;
-        std::vector<client> get(std::uint32_t id) override;
+        bool get(std::uint32_t id, client& out) override;
         std::vector<client> get(
             std::function<bool(const client &)> pred) override;
+        std::vector<client> get_all() override;
 
         bool update(const client &item) override;
 
@@ -24,4 +25,4 @@ namespace ezsrv::data::repos {
     };
 } // namespace ezsrv::data::repos
 
-#endif /* end of include guard: EZSRV_DATA_REPOS_CLIENTS_REPOSITORY_H */
+#endif /* EZSRV_DATA_REPOS_CLIENTS_REPOSITORY_H */
