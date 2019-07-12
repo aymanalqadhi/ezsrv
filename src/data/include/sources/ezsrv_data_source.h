@@ -1,5 +1,5 @@
-#ifndef EZSEV_DATA_SOURCES_EZSRV_DATA_SOURCE_H
-#define EZSEV_DATA_SOURCES_EZSRV_DATA_SOURCE_H
+#ifndef EZSRV_DATA_SOURCES_EZSRV_DATA_SOURCE_H
+#define EZSRV_DATA_SOURCES_EZSRV_DATA_SOURCE_H
 
 #include "models/client.h"
 #include "repos/repository.h"
@@ -18,4 +18,4 @@ namespace ezsrv::data::sources {
     };
 } // namespace ezsrv::data::sources
 
-#endif /* end of include guard: EZSEV_DATA_SOURCES_EZSRV_DATA_SOURCE_H */
+#endif /* EZSRV_DATA_SOURCES_EZSRV_DATA_SOURCE_H */
