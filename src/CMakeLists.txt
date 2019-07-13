@@ -16,6 +16,7 @@ add_subdirectory(config)
 add_subdirectory(log)
 add_subdirectory(data)
 add_subdirectory(main)
+add_subdirectory(lib)
 
 # Final executable
 add_executable(${PROJECT_NAME} $<TARGET_OBJECTS:ezsrv_main>)
