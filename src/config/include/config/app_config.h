@@ -13,7 +13,7 @@ namespace ezsrv::config {
 
     namespace defaults {
         constexpr std::uint16_t listen_port {3434};
-        constexpr std::uint16_t  verbosity {0};
+        constexpr std::uint16_t  verbosity {3};
     } // namespace defaults
 
     struct app_config {
