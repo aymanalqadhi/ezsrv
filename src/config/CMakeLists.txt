@@ -10,9 +10,6 @@ set(SOURCE_FILES src/app_config.cpp)
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
-# Definitions
-add_definitions(-DBOOST_ERROR_CODE_HEADER_ONLY)
-
 # Dependencies
 find_package(Boost COMPONENTS program_options REQUIRED)
 include_directories(${Boost_INCLUDE_DIRS})
