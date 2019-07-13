@@ -34,10 +34,11 @@ app_config app_config::from_command_line(int argc, const char *argv[]) {
     } else if (var_map.count("version")) {
         std::cout << info::app_name << ": " << info::app_version << std::endl;
         std::exit(EXIT_SUCCESS);
-    } else if (var_map.count("verbose") &&
-               var_map["verbose"].as<std::uint16_t>() > 5) {
-        throw po::invalid_option_value(
-            "Verbosity level must be between 0 and 5");
+    } else if (var_map.count("verbose")) {
+        auto log_level = var_map["verbose"].as<std::uint16_t>();
+        if (log_level > 6) {
+            throw po::invalid_option_value(std::to_string(log_level));
+        }
     }
 
     return {
@@ -49,8 +50,10 @@ app_config app_config::from_command_line(int argc, const char *argv[]) {
                               : defaults::listen_port,
 
         // Verbosity
-        var_map.count("verbose") ? var_map["verbose"].as<std::uint16_t>()
-                                 : defaults::verbosity,
+        var_map.count("verbose")
+            ? static_cast<std::uint16_t>(
+                6 - var_map["verbose"].as<std::uint16_t>())
+            : defaults::verbosity,
     };
 }
 
