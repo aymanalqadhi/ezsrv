@@ -15,6 +15,7 @@ set(LIBRARY_OUTPUT_PATH lib)
 add_subdirectory(config)
 add_subdirectory(log)
 add_subdirectory(data)
+add_subdirectory(app)
 add_subdirectory(main)
 add_subdirectory(lib)
 
