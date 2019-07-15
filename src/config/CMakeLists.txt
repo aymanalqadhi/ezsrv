@@ -7,7 +7,7 @@ project(ezsrv_config)
 set(SOURCE_FILES src/app_config.cpp)
 
 # Targets
-add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES} ${HEADER_FILES})
+add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
 
 # Dependencies
