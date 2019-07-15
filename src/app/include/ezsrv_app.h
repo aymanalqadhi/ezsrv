@@ -13,13 +13,15 @@ namespace ezsrv::app {
 
         class ezsrv_app final : public iapplication {
           public:
-            ezsrv_app(const logger &logger) : logger_(logger) {}
+            explicit ezsrv_app(app_config &config, logger &logger)
+                : config_(config), logger_(logger) {}
 
-            void configure(const app_config &config) override final;
-            [[noreturn]] void run() override final;
+            void configure() override final;
+            void run() override final;
 
           private:
-            const logger &logger_;
+            const app_config &config_;
+            logger &          logger_;
         };
     } // namespace details
 
