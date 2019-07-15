@@ -15,6 +15,7 @@ set(LIBRARY_OUTPUT_PATH lib)
 add_subdirectory(config)
 add_subdirectory(log)
 add_subdirectory(data)
+add_subdirectory(net)
 add_subdirectory(app)
 add_subdirectory(main)
 add_subdirectory(lib)
@@ -22,7 +23,7 @@ add_subdirectory(lib)
 # Final executable
 add_executable(${PROJECT_NAME} $<TARGET_OBJECTS:ezsrv_main>)
 target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log ezsrv_data
-                                      ezsrv_app)
+                                      ezsrv_app ezsrv_net)
 
 # Install
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
