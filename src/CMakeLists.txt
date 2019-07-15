@@ -21,7 +21,8 @@ add_subdirectory(lib)
 
 # Final executable
 add_executable(${PROJECT_NAME} $<TARGET_OBJECTS:ezsrv_main>)
-target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log ezsrv_data)
+target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log ezsrv_data
+                                      ezsrv_app)
 
 # Install
 install(TARGETS ${PROJECT_NAME} DESTINATION bin)
