@@ -9,7 +9,7 @@ set(SOURCE_FILES src/ezsrv_app.cpp)
 # Targets
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log)
+target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log ezsrv_net)
 
 # Install destination
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
