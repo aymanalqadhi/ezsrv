@@ -27,24 +27,24 @@ namespace ezsrv::data::models {
         client() = default;
         explicit client(const std::uint32_t id) : id_(id) {}
 
-        inline const std::uint32_t id() const noexcept { return id_; }
-        inline const client_type   type() const noexcept { return type_; }
-        inline const std::string & name() const noexcept { return name_; }
-        inline const std::uint32_t permissions() const noexcept {
+        inline std::uint32_t      id() const noexcept { return id_; }
+        inline client_type        type() const noexcept { return type_; }
+        inline const std::string &name() const noexcept { return name_; }
+        inline std::uint32_t      permissions() const noexcept {
             return permissions_;
         }
-        inline const bool has_permission(client_permission perm) const
-            noexcept {
+        inline bool has_permission(client_permission perm) const noexcept {
             return permissions_ & static_cast<std::uint32_t>(perm);
         }
 
+        inline void id(const std::uint32_t id) noexcept { id_ = id; }
         inline void type(const client_type type) noexcept { type_ = type; }
         inline void name(const std::string &name) noexcept { name_ = name; }
         inline void permissions(const std::uint32_t permissions) noexcept {
             permissions_ = permissions;
         }
-        inline void set_permission_group(
-            const client_permission_group pgrp) noexcept {
+        inline void
+        set_permission_group(const client_permission_group pgrp) noexcept {
             permissions_ = static_cast<std::uint32_t>(pgrp);
         }
         inline void set_permission(client_permission perm) noexcept {
