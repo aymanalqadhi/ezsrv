@@ -14,7 +14,7 @@ namespace ezsrv::data::sources {
 
       public:
         memory_ezsrv_data_source()
-            : clients_repo_(std::make_shared<clients_repo>()) {}
+            : clients_repo_ {std::make_shared<clients_repo>()} {}
 
         std::shared_ptr<repository<client>> clients_repository() override {
             return clients_repo_;
