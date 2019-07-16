@@ -20,10 +20,10 @@ int main(int argc, const char *argv[]) {
         const auto injector = boost::di::make_injector(
             boost::di::bind<app_config>().to(opts),
             boost::di::bind<iapplication>().to<ezsrv_app>());
-        auto app = injector.create<ezsrv_app>();
+        auto app = injector.create<iapplication *>();
 
-        app.configure();
-        app.run();
+        app->configure();
+        app->run();
     } catch (const std::exception &ex) {
         std::cerr << ex.what() << std::endl;
         return 1;
