@@ -49,6 +49,9 @@ app_config app_config::from_command_line(int argc, const char *argv[]) {
         var_map.count("port") ? var_map["port"].as<std::uint16_t>()
                               : defaults::listen_port,
 
+        // IPv6 Only
+        var_map.count("ipv6") > 0,
+
         // Verbosity
         var_map.count("verbose")
             ? static_cast<std::uint16_t>(
@@ -85,6 +88,10 @@ po::options_description get_options_aggregator() {
               "port,p",
               po::value<std::uint16_t>()->default_value(defaults::listen_port),
               "Set the listening TCP port"
+            )
+            (
+              "ipv6,6",
+              "Accept IPv6 connections only"
             );
         return global;
     }
