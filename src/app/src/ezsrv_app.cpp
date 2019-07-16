@@ -5,11 +5,11 @@
 
 using ezsrv::app::ezsrv_app;
 
-void ezsrv_app::configure(const app_config &config) {
-    logger_.info("Configuring application");
+void ezsrv_app::configure() {
+    logger_.info("Configuring application {}", config_.executable);
 }
 
-[[noreturn]]
 void ezsrv_app::run() {
     logger_.info("Running application");
+    server_.run();
 }
