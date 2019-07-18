@@ -6,7 +6,6 @@
 namespace ezsrv::net {
     enum class client_state {
         idle,
-        authing,
         reading_header,
         reading_body,
         closing
@@ -17,7 +16,6 @@ namespace ezsrv::net {
 
         class client_state_machine {
           public:
-            virtual void on_authing(std::string_view msg)        = 0;
             virtual void on_reading_header(std::string_view msg) = 0;
             virtual void on_reading_body(std::string_view msg)   = 0;
             virtual void on_error(const error_code &err)         = 0;
@@ -33,10 +31,6 @@ namespace ezsrv::net {
                 }
 
                 switch (current_state_) {
-                case client_state::authing:
-                    on_authing(msg);
-                    break;
-
                 case client_state::reading_header:
                     on_reading_header(msg);
                     break;
