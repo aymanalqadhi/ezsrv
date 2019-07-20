@@ -12,6 +12,7 @@
 #include <functional>
 #include <memory>
 #include <string_view>
+#include <vector>
 
 namespace ezsrv::net {
     constexpr auto auth_message_length = 0x40;
@@ -29,6 +30,8 @@ namespace ezsrv::net {
                 auth_cb;
             std::function<void(std::shared_ptr<tcp_client>, std::string_view)>
                 message_read_cb;
+            std::function<void(std::shared_ptr<tcp_client>, const error_code &)>
+                error_cb;
             std::function<void(std::shared_ptr<tcp_client>, const error_code &)>
                 close_cb;
         };
@@ -48,12 +51,19 @@ namespace ezsrv::net {
             void on_reading_body(std::string_view msg) final override;
             void on_error(const error_code &err) final override;
 
+            void enqueue_send(std::shared_ptr<std::string> msg);
+            void send_enqueued();
+
+            void handle_send(std::size_t sent, const error_code& err);
+
             tcp::socket &socket() { return sock_; }
 
           private:
             std::string             tmp_buffer_;
             tcp::socket             sock_;
             reading_context         reading_ctx_;
+
+            std::vector<std::shared_ptr<std::string>> send_queue_;
             const client_callbacks &callbacks_;
         };
     } // namespace details
