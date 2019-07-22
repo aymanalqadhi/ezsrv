@@ -26,7 +26,6 @@ namespace ezsrv::net {
                 current_state_ = state;
             }
 
-          private:
             void handle_read(std::size_t       nread,
                              std::string_view  msg,
                              const error_code &err) {
