@@ -17,23 +17,21 @@
 namespace ezsrv::net {
     constexpr auto auth_message_length = 0x40;
     namespace details {
-        using boost::asio::ip::tcp;
-        using boost::system::error_code;
-        using ezsrv::net::reading_context;
-
         class tcp_client;
 
+        using ezsrv::net::reading_context;
+        using tcp_client_ptr = std::shared_ptr<tcp_client>;
+
+        using boost::asio::ip::tcp;
+        using boost::system::error_code;
+
         struct client_callbacks {
-            std::function<bool(std::shared_ptr<tcp_client>,
-                               std::string_view,
-                               std::string_view)>
-                auth_cb;
-            std::function<void(std::shared_ptr<tcp_client>, std::string_view)>
+            std::function<void(const tcp_client_ptr &, std::string_view)>
                 message_read_cb;
-            std::function<void(std::shared_ptr<tcp_client>, const error_code &)>
+            std::function<void(const tcp_client_ptr &, const error_code &)>
                 error_cb;
-            std::function<void(std::shared_ptr<tcp_client>, const error_code &)>
-                close_cb;
+
+            std::function<void(const tcp_client_ptr &)> close_cb;
         };
 
         class tcp_client final
@@ -42,29 +40,30 @@ namespace ezsrv::net {
               public std::enable_shared_from_this<tcp_client> {
           public:
             tcp_client(tcp::socket &&sock, const client_callbacks &callbacks)
-                : sock_ {std::move(sock)},
-                  callbacks_ {callbacks} {}
+                : sock_ {std::move(sock)}, callbacks_ {callbacks} {}
 
             void start();
-
-            void on_reading_header(std::string_view msg) final override;
-            void on_reading_body(std::string_view msg) final override;
-            void on_error(const error_code &err) final override;
 
             void enqueue_send(std::shared_ptr<std::string> msg);
             void send_enqueued();
 
-            void handle_send(std::size_t sent, const error_code& err);
-
             tcp::socket &socket() { return sock_; }
 
           private:
-            std::string             tmp_buffer_;
-            tcp::socket             sock_;
-            reading_context         reading_ctx_;
+            void on_reading_header(std::string_view msg) final override;
+            void on_reading_body(std::string_view msg) final override;
+            void on_error(const error_code &err) final override;
+
+            void handle_send(std::size_t sent, const error_code &err);
+            void read_next(std::size_t bytes);
+
+          private:
+            std::string     tmp_buffer_;
+            tcp::socket     sock_;
+            reading_context reading_ctx_;
 
             std::vector<std::shared_ptr<std::string>> send_queue_;
-            const client_callbacks &callbacks_;
+            const client_callbacks &                  callbacks_;
         };
     } // namespace details
     using details::tcp_client;
