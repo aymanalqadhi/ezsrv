@@ -4,7 +4,8 @@ cmake_minimum_required(VERSION 3.10)
 project(ezsrv_net)
 
 # Files
-set(SOURCE_FILES src/server.cpp src/tcp_listener.cpp src/tcp_client.cpp)
+set(SOURCE_FILES src/server.cpp src/tcp_listener.cpp src/tcp_client.cpp
+                 src/message_header.cpp)
 
 # Targets
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
