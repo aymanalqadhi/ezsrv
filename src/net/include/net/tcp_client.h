@@ -9,6 +9,8 @@
 #include "boost/asio/streambuf.hpp"
 #include "boost/system/error_code.hpp"
 
+#include "fmt/format.h"
+
 #include <functional>
 #include <memory>
 #include <string_view>
@@ -47,7 +49,19 @@ namespace ezsrv::net {
             void enqueue_send(std::shared_ptr<std::string> msg);
             void send_enqueued();
 
-            tcp::socket &socket() { return sock_; }
+            inline tcp::socket &socket() { return sock_; }
+            inline bool is_connected() const noexcept {
+                return sock_.is_open();
+            }
+            inline std::string address() const {
+                return sock_.remote_endpoint().address().to_string();
+            }
+            inline std::uint16_t port() const {
+                return sock_.remote_endpoint().port();
+            }
+            inline std::string endpoint_string() const {
+                return fmt::format("{}:{}", address(), port());
+            }
 
           private:
             void on_reading_header(std::string_view msg) final override;
