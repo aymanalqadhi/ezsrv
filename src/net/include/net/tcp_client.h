@@ -9,7 +9,7 @@
 #include "boost/asio/streambuf.hpp"
 #include "boost/system/error_code.hpp"
 
-#include "fmt/format.h"
+#include "spdlog/fmt/fmt.h"
 
 #include <functional>
 #include <memory>
