@@ -9,6 +9,8 @@
 #include "boost/asio/ip/tcp.hpp"
 #include "boost/system/error_code.hpp"
 
+#include "spdlog/fmt/fmt.h"
+
 #include <atomic>
 
 namespace ezsrv::net {
@@ -43,6 +45,17 @@ namespace ezsrv::net {
             void stop();
 
             inline tcp::acceptor &acceptor() noexcept { return acceptor_; }
+            inline bool is_running() const noexcept { return is_running_; }
+
+            inline std::string listen_address() const {
+                return acceptor_.local_endpoint().address().to_string();
+            }
+            inline std::uint16_t listen_port() const {
+                return acceptor_.local_endpoint().port();
+            }
+            inline std::string endpoint_string() const {
+                return fmt::format("{}:{}", listen_address(), listen_port());
+            }
 
           private:
             void accept_next();
