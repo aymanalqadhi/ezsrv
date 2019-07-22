@@ -6,21 +6,30 @@
 #include "net/tcp_listener.h"
 
 #include "boost/asio/io_context.hpp"
+#include "boost/system/error_code.hpp"
 
 #include <atomic>
+#include <string_view>
 
 namespace ezsrv::net {
     namespace details {
+        using namespace std::placeholders;
+
         using ezsrv::config::app_config;
         using ezsrv::log::logger;
         using ezsrv::net::tcp_listener;
+        using tcp_client_ptr = std::shared_ptr<tcp_client>;
 
         using boost::asio::io_context;
+        using boost::system::error_code;
 
         class server {
           public:
             server(const app_config &config, logger &logger)
-                : listener_ {io_ctx_, config, logger},
+                : callbacks_ {std::bind(&server::on_message_read, this, _1, _2),
+                              std::bind(&server::on_error, this, _1, _2),
+                              std::bind(&server::on_close, this, _1)},
+                  listener_ {io_ctx_, callbacks_, config, logger},
                   config_ {config},
                   logger_ {logger},
                   is_running_ {false} {}
@@ -28,12 +37,20 @@ namespace ezsrv::net {
             void run();
 
           private:
+            void on_message_read(const tcp_client_ptr &client,
+                                 std::string_view      msg);
+            void on_error(const tcp_client_ptr &client, const error_code &err);
+            void on_close(const tcp_client_ptr &client);
+
+          private:
             io_context io_ctx_;
 
+            client_callbacks  callbacks_;
             tcp_listener      listener_;
             const app_config &config_;
             logger &          logger_;
-            std::atomic_bool  is_running_;
+
+            std::atomic_bool is_running_;
         };
     } // namespace details
 
