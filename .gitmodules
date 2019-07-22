@@ -7,3 +7,6 @@
 [submodule "src/lib/di"]
 	path = src/lib/di
 	url = https://github.com/boost-experimental/di
+[submodule "src/lib/googletest"]
+	path = src/lib/googletest
+	url = https://github.com/google/googletest
