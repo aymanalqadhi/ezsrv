@@ -1,6 +1,7 @@
 #include "net/server.h"
 #include "net/tcp_client.h"
 
+#include "boost/asio/io_context.hpp"
 #include "boost/system/error_code.hpp"
 
 using tcp_client_ptr = std::shared_ptr<ezsrv::net::tcp_client>;
@@ -17,6 +18,8 @@ void server::run() {
                  config_.listen_port);
 
     logger_.debug("Starting event loop");
+
+    boost::asio::io_context::work work {io_ctx_};
     io_ctx_.run();
 }
 
