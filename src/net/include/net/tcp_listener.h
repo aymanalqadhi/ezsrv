@@ -3,6 +3,7 @@
 
 #include "config/app_config.h"
 #include "log/logger.h"
+#include "net/tcp_client.h"
 
 #include "boost/asio/io_context.hpp"
 #include "boost/asio/ip/tcp.hpp"
@@ -19,7 +20,7 @@ namespace ezsrv::net {
         using boost::asio::ip::tcp;
         using boost::system::error_code;
 
-        using tcp_socket_ptr = std::shared_ptr<tcp::socket>;
+        using tcp_client_ptr = std::shared_ptr<tcp_client>;
 
         inline auto get_endpoint(const app_config &conf) {
             return tcp::endpoint {conf.ipv6_only ? tcp::v6() : tcp::v4(),
@@ -28,10 +29,12 @@ namespace ezsrv::net {
 
         class tcp_listener {
           public:
-            tcp_listener(io_context &      io_ctx,
-                         const app_config &config,
-                         logger &          logger)
-                : config_ {config},
+            tcp_listener(io_context &            io_ctx,
+                         const client_callbacks &callbacks,
+                         const app_config &      config,
+                         logger &                logger)
+                : callbacks_ {callbacks},
+                  config_ {config},
                   logger_ {logger},
                   acceptor_ {io_ctx, get_endpoint(config)},
                   is_running_ {false} {}
@@ -43,10 +46,11 @@ namespace ezsrv::net {
 
           private:
             void accept_next();
-            void handle_accept(tcp_socket_ptr client, const error_code &err);
+            void handle_accept(tcp_client_ptr client, const error_code &err);
 
-            const app_config &config_;
-            logger &          logger_;
+            const client_callbacks &callbacks_;
+            const app_config &      config_;
+            logger &                logger_;
 
             tcp::acceptor    acceptor_;
             std::atomic_bool is_running_;
