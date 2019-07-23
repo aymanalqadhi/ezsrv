@@ -29,9 +29,15 @@ void server::on_message_read(const tcp_client_ptr &client,
 }
 
 void server::on_error(const tcp_client_ptr &client, const error_code &err) {
-    logger_.info("Got error from {}: {}", client->address(), err.message());
+    logger_.info("Got an error from client `{}' was closed", client->name());
+    if (client->is_connected()) {
+        client->socket().close();
+    }
 }
 
 void server::on_close(const tcp_client_ptr &client) {
-    logger_.info("Connection to {}:{} was closed", client->endpoint_string());
+    logger_.info("Connection to client `{}' was closed", client->name());
+    if (client->is_connected()) {
+        client->socket().close();
+    }
 }
