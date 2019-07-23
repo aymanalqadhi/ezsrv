@@ -45,12 +45,13 @@ namespace ezsrv::net {
                 : sock_ {std::move(sock)}, callbacks_ {callbacks} {}
 
             void start();
+            void close();
 
             void enqueue_send(std::shared_ptr<std::string> msg);
             void send_enqueued();
 
             inline tcp::socket &socket() { return sock_; }
-            inline bool is_connected() const noexcept {
+            inline bool         is_connected() const noexcept {
                 return sock_.is_open();
             }
             inline std::string address() const {
@@ -72,9 +73,9 @@ namespace ezsrv::net {
             void read_next(std::size_t bytes);
 
           private:
-            std::string     tmp_buffer_;
-            tcp::socket     sock_;
-            reading_context reading_ctx_;
+            ezsrv::net::basic_buffer tmp_buffer_;
+            tcp::socket              sock_;
+            reading_context          reading_ctx_;
 
             std::vector<std::shared_ptr<std::string>> send_queue_;
             const client_callbacks &                  callbacks_;
