@@ -8,6 +8,31 @@
 #include <string_view>
 
 namespace ezsrv::net {
+    class basic_buffer {
+      public:
+        inline void allocate(std::size_t len) {
+            if (data_ != nullptr) {
+                delete[] data_;
+            }
+            data_ = new char[len_ = len];
+        }
+
+        inline void clean() {
+            if (data_ != nullptr) {
+                delete[] data_;
+                data_ = nullptr;
+            }
+            len_ = 0;
+        }
+
+        inline char *      data() const noexcept { return data_; }
+        inline std::size_t length() const noexcept { return len_; }
+
+      private:
+        std::size_t len_ {0};
+        char *      data_ {nullptr};
+    };
+
     class buffer {
       public:
         buffer(std::size_t length) : total_ {length}, current_ {0} {
