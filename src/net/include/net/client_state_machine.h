@@ -5,6 +5,7 @@
 #include "boost/system/error_code.hpp"
 
 #include <iostream>
+#include <string>
 
 namespace ezsrv::net {
     enum class client_state { idle, reading_header, reading_body, closing };
@@ -28,27 +29,7 @@ namespace ezsrv::net {
 
             void handle_read(std::size_t       nread,
                              std::string_view  msg,
-                             const error_code &err) {
-                if (err) {
-                    on_error(err);
-                    return;
-                } else if (nread == 0) {
-                    on_error(boost::asio::error::eof);
-                }
-
-                switch (current_state_) {
-                case client_state::reading_header:
-                    on_reading_header(msg);
-                    break;
-
-                case client_state::reading_body:
-                    on_reading_body(msg);
-                    break;
-
-                default:
-                    break;
-                }
-            }
+                             const error_code &err);
 
           private:
             client_state current_state_;

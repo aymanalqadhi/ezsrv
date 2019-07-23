@@ -5,7 +5,7 @@ project(ezsrv_net)
 
 # Files
 set(SOURCE_FILES src/server.cpp src/tcp_listener.cpp src/tcp_client.cpp
-                 src/message_header.cpp)
+                 src/client_state_machine.cpp src/message_header.cpp)
 
 # Targets
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
