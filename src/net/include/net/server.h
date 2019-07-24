@@ -3,6 +3,8 @@
 
 #include "config/app_config.h"
 #include "log/logger.h"
+
+#include "net/tcp_client.h"
 #include "net/tcp_listener.h"
 
 #include "boost/asio/io_context.hpp"
@@ -10,6 +12,7 @@
 
 #include <atomic>
 #include <string_view>
+#include <vector>
 
 namespace ezsrv::net {
     namespace details {
@@ -32,11 +35,15 @@ namespace ezsrv::net {
                   listener_ {io_ctx_, callbacks_, config, logger},
                   config_ {config},
                   logger_ {logger},
-                  is_running_ {false} {}
+                  is_running_ {false} {
+                listener_.set_accept_cb(
+                    std::bind(&server::on_client_accepted, this, _1));
+            }
 
             void run();
 
           private:
+            void on_client_accepted(tcp_client_ptr client);
             void on_message_read(const tcp_client_ptr &client,
                                  std::string_view      msg);
             void on_error(const tcp_client_ptr &client, const error_code &err);
@@ -50,7 +57,11 @@ namespace ezsrv::net {
             const app_config &config_;
             logger &          logger_;
 
-            std::atomic_bool is_running_;
+            std::atomic_bool            is_running_;
+
+            // TODO:
+            // Use hashtables instead of vector
+            std::vector<tcp_client_ptr> clients_;
         };
     } // namespace details
 

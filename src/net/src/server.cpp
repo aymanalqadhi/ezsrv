@@ -23,6 +23,11 @@ void server::run() {
     io_ctx_.run();
 }
 
+void server::on_client_accepted(tcp_client_ptr client) {
+    client->start();
+    clients_.emplace_back(std::move(client));
+}
+
 void server::on_message_read(const tcp_client_ptr &client,
                              std::string_view      msg) {
     logger_.info("Got message from {}:{} : {}", client->address(),
@@ -39,8 +44,8 @@ void server::on_error(const tcp_client_ptr &client, const error_code &err) {
 }
 
 void server::on_close(const tcp_client_ptr &client) {
-    logger_.info("Connection to client {}:{} was closed",
-                 client->address(), client->port());
+    logger_.info("Connection to client {}:{} was closed", client->address(),
+                 client->port());
 
     if (client->is_connected()) {
         client->socket().close();
