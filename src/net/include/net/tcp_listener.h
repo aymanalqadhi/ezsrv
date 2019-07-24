@@ -22,7 +22,8 @@ namespace ezsrv::net {
         using boost::asio::ip::tcp;
         using boost::system::error_code;
 
-        using tcp_client_ptr = std::shared_ptr<tcp_client>;
+        using tcp_client_ptr     = std::shared_ptr<tcp_client>;
+        using client_accepted_cb = std::function<void(tcp_client_ptr)>;
 
         inline auto get_endpoint(const app_config &conf) {
             return tcp::endpoint {conf.ipv6_only ? tcp::v6() : tcp::v4(),
@@ -43,6 +44,10 @@ namespace ezsrv::net {
 
             void start();
             void stop();
+
+            inline void set_accept_cb(client_accepted_cb callback) {
+                accept_cb_ = std::move(callback);
+            }
 
             inline tcp::acceptor &acceptor() noexcept { return acceptor_; }
             inline bool is_running() const noexcept { return is_running_; }
@@ -67,6 +72,8 @@ namespace ezsrv::net {
 
             tcp::acceptor    acceptor_;
             std::atomic_bool is_running_;
+
+            client_accepted_cb accept_cb_ {[]([[maybe_unused]] auto client) {}};
         };
     } // namespace details
 

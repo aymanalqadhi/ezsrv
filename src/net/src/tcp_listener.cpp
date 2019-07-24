@@ -1,11 +1,15 @@
+#include "net/tcp_client.h"
 #include "net/tcp_listener.h"
 
 #include "boost/asio/ip/tcp.hpp"
+#include "boost/asio/placeholders.hpp"
+#include "boost/bind.hpp"
 #include "boost/system/error_code.hpp"
 
 using ezsrv::net::tcp_listener;
 
 using boost::asio::ip::tcp;
+using boost::asio::placeholders::error;
 using boost::system::error_code;
 
 void tcp_listener::start() {
@@ -30,23 +34,22 @@ void tcp_listener::accept_next() {
         return;
     }
 
-    auto client_ptr = std::make_shared<tcp::socket>(acceptor_.get_io_context());
-    acceptor_.async_accept(*client_ptr,
-                           std::bind(&tcp_listener::handle_accept, this,
-                                     client_ptr, std::placeholders::_1));
+    auto client_ptr {std::make_shared<tcp_client>(
+        tcp::socket {acceptor_.get_io_context()}, callbacks_)};
+
+    acceptor_.async_accept(
+        client_ptr->socket(),
+        boost::bind(&tcp_listener::handle_accept, this, client_ptr, error));
 }
 
-void tcp_listener::handle_accept(std::shared_ptr<tcp::socket> client,
-                                 const error_code &           err) {
+void tcp_listener::handle_accept(std::shared_ptr<tcp_client> client,
+                                 const error_code &          err) {
     if (err) {
         logger_.error("{}", err.message());
+        accept_next();
+        return;
     }
 
-    auto endpoint {client->remote_endpoint()};
-    logger_.info("Got connection from {}:{}", endpoint.address().to_string(),
-                 endpoint.port());
-
-    client->send(boost::asio::buffer("Test message"));
-
+    accept_cb_(std::move(client));
     accept_next();
 }
