@@ -12,7 +12,7 @@
 
 #include <atomic>
 #include <string_view>
-#include <vector>
+#include <unordered_map>
 
 namespace ezsrv::net {
     namespace details {
@@ -57,11 +57,8 @@ namespace ezsrv::net {
             const app_config &config_;
             logger &          logger_;
 
-            std::atomic_bool            is_running_;
-
-            // TODO:
-            // Use hashtables instead of vector
-            std::vector<tcp_client_ptr> clients_;
+            std::atomic_bool                                  is_running_;
+            std::unordered_map<std::uint32_t, tcp_client_ptr> clients_;
         };
     } // namespace details
 
