@@ -14,6 +14,9 @@ namespace ezsrv::net {
         using boost::system::error_code;
 
         class client_state_machine {
+          public:
+              client_state_machine()
+                  : current_state_ { client_state::idle } {}
           protected:
             virtual void on_reading_header(std::string_view msg) = 0;
             virtual void on_reading_body(std::string_view msg)   = 0;
