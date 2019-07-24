@@ -25,18 +25,23 @@ void server::run() {
 
 void server::on_message_read(const tcp_client_ptr &client,
                              std::string_view      msg) {
-    logger_.info("Got message from {}: {}", client->address(), msg);
+    logger_.info("Got message from {}:{} : {}", client->address(),
+                 client->port(), msg);
 }
 
 void server::on_error(const tcp_client_ptr &client, const error_code &err) {
-    logger_.info("Got an error from client `{}' was closed", client->name());
+    logger_.info("Got an error from client {}:{} : {}", client->address(),
+                 client->port(), err.message());
+
     if (client->is_connected()) {
         client->socket().close();
     }
 }
 
 void server::on_close(const tcp_client_ptr &client) {
-    logger_.info("Connection to client `{}' was closed", client->name());
+    logger_.info("Connection to client {}:{} was closed",
+                 client->address(), client->port());
+
     if (client->is_connected()) {
         client->socket().close();
     }
