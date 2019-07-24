@@ -10,7 +10,7 @@
 namespace ezsrv::net {
     class reading_context {
       public:
-        static constexpr std::size_t recommended_chunk_size = 1;
+        static constexpr std::size_t recommended_chunk_size = 0x400;
 
         inline const request_message_header &header() const noexcept {
             return header_;
