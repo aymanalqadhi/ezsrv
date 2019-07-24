@@ -39,9 +39,6 @@ void tcp_client::start() {
     if (state() == client_state::idle) {
         state(client_state::reading_header);
         read_next(header_size);
-
-        address_ = sock_.remote_endpoint().address().to_string();
-        port_ = sock_.remote_endpoint().port();
     } else {
         throw std::runtime_error {"Client was already started!"};
     }

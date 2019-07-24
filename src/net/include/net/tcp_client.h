@@ -39,7 +39,11 @@ namespace ezsrv::net {
               public std::enable_shared_from_this<tcp_client> {
           public:
             tcp_client(tcp::socket &&sock, const client_callbacks &callbacks)
-                : sock_ {std::move(sock)}, callbacks_ {callbacks} {}
+                : sock_ {std::move(sock)}, callbacks_ {callbacks} {
+                static std::atomic_uint32_t next_id = 0;
+
+                id_ = next_id++;
+            }
 
             void start();
             void close();
@@ -47,13 +51,18 @@ namespace ezsrv::net {
             void enqueue_send(std::shared_ptr<std::string> msg);
             void send_enqueued();
 
-            inline tcp::socket &socket() { return sock_; }
-            inline bool         is_connected() const noexcept {
+            inline std::uint32_t id() const noexcept { return id_; }
+            inline tcp::socket & socket() { return sock_; }
+            inline bool          is_connected() const noexcept {
                 return sock_.is_open();
             }
 
-            inline std::string   address() const { return address_; }
-            inline std::uint16_t port() const { return port_; }
+            inline std::string address() const {
+                return sock_.remote_endpoint().address().to_string();
+            }
+            inline std::uint16_t port() const {
+                return sock_.remote_endpoint().port();
+            }
 
           private:
             void on_reading_header(std::string_view msg) final override;
@@ -71,8 +80,7 @@ namespace ezsrv::net {
             std::vector<std::shared_ptr<std::string>> send_queue_;
             const client_callbacks &                  callbacks_;
 
-            std::string   address_;
-            std::uint16_t port_;
+            std::uint32_t id_;
         };
     } // namespace details
     using details::tcp_client;
