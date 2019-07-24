@@ -22,6 +22,7 @@ namespace ezsrv::net {
         class tcp_client;
 
         using ezsrv::net::reading_context;
+        using ezsrv::net::basic_buffer;
         using tcp_client_ptr = std::shared_ptr<tcp_client>;
 
         using boost::asio::ip::tcp;
@@ -73,9 +74,9 @@ namespace ezsrv::net {
             void read_next(std::size_t bytes);
 
           private:
-            ezsrv::net::basic_buffer tmp_buffer_;
-            tcp::socket              sock_;
+            basic_buffer tmp_buffer_;
             reading_context          reading_ctx_;
+            tcp::socket              sock_;
 
             std::vector<std::shared_ptr<std::string>> send_queue_;
             const client_callbacks &                  callbacks_;
