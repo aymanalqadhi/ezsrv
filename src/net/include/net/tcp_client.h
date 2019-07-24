@@ -1,15 +1,12 @@
 #ifndef EZSRV_NET_TCP_CLIENT_H
 #define EZSRV_NET_TCP_CLIENT_H
 
-#include "data/models/client.h"
 #include "net/client_state_machine.h"
 #include "net/reading_context.h"
 
 #include "boost/asio/ip/tcp.hpp"
 #include "boost/asio/streambuf.hpp"
 #include "boost/system/error_code.hpp"
-
-#include "spdlog/fmt/fmt.h"
 
 #include <functional>
 #include <memory>
@@ -21,8 +18,8 @@ namespace ezsrv::net {
     namespace details {
         class tcp_client;
 
-        using ezsrv::net::reading_context;
         using ezsrv::net::basic_buffer;
+        using ezsrv::net::reading_context;
         using tcp_client_ptr = std::shared_ptr<tcp_client>;
 
         using boost::asio::ip::tcp;
@@ -38,8 +35,7 @@ namespace ezsrv::net {
         };
 
         class tcp_client final
-            : public ezsrv::data::models::client,
-              public ezsrv::net::client_state_machine,
+            : public ezsrv::net::client_state_machine,
               public std::enable_shared_from_this<tcp_client> {
           public:
             tcp_client(tcp::socket &&sock, const client_callbacks &callbacks)
@@ -55,15 +51,9 @@ namespace ezsrv::net {
             inline bool         is_connected() const noexcept {
                 return sock_.is_open();
             }
-            inline std::string address() const {
-                return sock_.remote_endpoint().address().to_string();
-            }
-            inline std::uint16_t port() const {
-                return sock_.remote_endpoint().port();
-            }
-            inline std::string endpoint_string() const {
-                return fmt::format("{}:{}", address(), port());
-            }
+
+            inline std::string   address() const { return address_; }
+            inline std::uint16_t port() const { return port_; }
 
           private:
             void on_reading_header(std::string_view msg) final override;
@@ -74,12 +64,15 @@ namespace ezsrv::net {
             void read_next(std::size_t bytes);
 
           private:
-            basic_buffer tmp_buffer_;
-            reading_context          reading_ctx_;
-            tcp::socket              sock_;
+            basic_buffer    tmp_buffer_;
+            reading_context reading_ctx_;
+            tcp::socket     sock_;
 
             std::vector<std::shared_ptr<std::string>> send_queue_;
             const client_callbacks &                  callbacks_;
+
+            std::string   address_;
+            std::uint16_t port_;
         };
     } // namespace details
     using details::tcp_client;

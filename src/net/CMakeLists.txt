@@ -10,7 +10,7 @@ set(SOURCE_FILES src/server.cpp src/tcp_listener.cpp src/tcp_client.cpp
 # Targets
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log ezsrv_data)
+target_link_libraries(${PROJECT_NAME} ezsrv_config ezsrv_log)
 
 # Install destination
 install(TARGETS ${PROJECT_NAME} DESTINATION lib)
