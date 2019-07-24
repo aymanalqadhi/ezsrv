@@ -13,41 +13,37 @@ using boost::system::error_code;
 void server::run() {
     logger_.info("Starting Listener");
     listener_.start();
-    logger_.info("Listener started on {}:{}",
-                 listener_.acceptor().local_endpoint().address().to_string(),
-                 config_.listen_port);
+    logger_.info("Listener started on {}", listener_.endpoint_string());
 
     logger_.debug("Starting event loop");
-
     boost::asio::io_context::work work {io_ctx_};
     io_ctx_.run();
 }
 
 void server::on_client_accepted(tcp_client_ptr client) {
+    logger_.info("Got a connection from {}:{}, and was given id #{}",
+                 client->address(), client->port(), client->id());
+
     client->start();
-    clients_.emplace_back(std::move(client));
+    clients_.emplace(std::make_pair(client->id(), std::move(client)));
 }
 
 void server::on_message_read(const tcp_client_ptr &client,
                              std::string_view      msg) {
-    logger_.info("Got message from {}:{} : {}", client->address(),
-                 client->port(), msg);
+    logger_.info("Got message from client #{}: {}", client->id(), msg);
 }
 
 void server::on_error(const tcp_client_ptr &client, const error_code &err) {
-    logger_.info("Got an error from client {}:{} : {}", client->address(),
-                 client->port(), err.message());
-
-    if (client->is_connected()) {
-        client->socket().close();
-    }
+    logger_.info("Got an error from client #{} : {}", client->id(),
+                 err.message());
+    on_close(client);
 }
 
 void server::on_close(const tcp_client_ptr &client) {
-    logger_.info("Connection to client {}:{} was closed", client->address(),
-                 client->port());
-
     if (client->is_connected()) {
-        client->socket().close();
+        client->close();
     }
+
+    logger_.info("Connection to client #{} was closed", client->id());
+    clients_.erase(client->id());
 }
