@@ -3,6 +3,7 @@
 
 #include "net/client_state_machine.h"
 #include "net/reading_context.h"
+#include "net/message.h"
 
 #include "boost/asio/ip/tcp.hpp"
 #include "boost/asio/streambuf.hpp"
@@ -26,8 +27,8 @@ namespace ezsrv::net {
         using boost::system::error_code;
 
         struct client_callbacks {
-            std::function<void(const tcp_client_ptr &, std::string_view)>
-                message_read_cb;
+            std::function<void(const tcp_client_ptr &, request_message)>
+                request_cb;
             std::function<void(const tcp_client_ptr &, const error_code &)>
                 error_cb;
 

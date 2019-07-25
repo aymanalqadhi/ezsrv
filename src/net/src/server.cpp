@@ -1,3 +1,4 @@
+#include "net/message.h"
 #include "net/server.h"
 #include "net/tcp_client.h"
 
@@ -28,9 +29,8 @@ void server::on_client_accepted(tcp_client_ptr client) {
     clients_.emplace(std::make_pair(client->id(), std::move(client)));
 }
 
-void server::on_message_read(const tcp_client_ptr &client,
-                             std::string_view      msg) {
-    logger_.info("Got message from client #{}: {}", client->id(), msg);
+void server::on_request(const tcp_client_ptr &client, request_message req) {
+    logger_.info("Got message from client #{}: {}", client->id(), req.body);
 }
 
 void server::on_error(const tcp_client_ptr &client, const error_code &err) {

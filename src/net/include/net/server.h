@@ -4,6 +4,7 @@
 #include "config/app_config.h"
 #include "log/logger.h"
 
+#include "net/message.h"
 #include "net/tcp_client.h"
 #include "net/tcp_listener.h"
 
@@ -29,7 +30,7 @@ namespace ezsrv::net {
         class server {
           public:
             server(const app_config &config, logger &logger)
-                : callbacks_ {std::bind(&server::on_message_read, this, _1, _2),
+                : callbacks_ {std::bind(&server::on_request, this, _1, _2),
                               std::bind(&server::on_error, this, _1, _2),
                               std::bind(&server::on_close, this, _1)},
                   listener_ {io_ctx_, callbacks_, config, logger},
@@ -44,8 +45,7 @@ namespace ezsrv::net {
 
           private:
             void on_client_accepted(tcp_client_ptr client);
-            void on_message_read(const tcp_client_ptr &client,
-                                 std::string_view      msg);
+            void on_request(const tcp_client_ptr &client, request_message msg);
             void on_error(const tcp_client_ptr &client, const error_code &err);
             void on_close(const tcp_client_ptr &client);
 

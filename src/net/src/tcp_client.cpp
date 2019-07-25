@@ -69,7 +69,9 @@ void tcp_client::on_reading_body(std::string_view msg) {
     reading_ctx_.add_body_data(msg);
 
     if (reading_ctx_.is_full()) {
-        callbacks_.message_read_cb(shared_from_this(), reading_ctx_.body());
+        callbacks_.request_cb(
+            shared_from_this(),
+            {std::move(reading_ctx_.header()), std::move(reading_ctx_.body())});
         state(client_state::reading_header);
         read_next(header_size);
     } else {
