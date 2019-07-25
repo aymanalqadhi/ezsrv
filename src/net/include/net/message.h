@@ -8,8 +8,8 @@
 namespace ezsrv::net {
     struct request_message {
         request_message_header header;
-        std::string_view body;
+        std::string_view       body;
     };
-}
+} // namespace ezsrv::net
 
 #endif /* EZSRV_NET_MESSAGE_H */

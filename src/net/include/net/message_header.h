@@ -7,12 +7,18 @@
 #include <array>
 
 namespace ezsrv::net {
-    constexpr auto header_size {16};
+    enum class message_type : std::uint16_t {
+        ping           = 0,
+        system_command = 1,
+        custom_command = 2,
+    };
 
     struct request_message_header {
-        using header_buffer = std::array<std::uint8_t, header_size>;
+        static constexpr auto size {16};
 
-        std::uint16_t type;
+        using header_buffer = std::array<std::uint8_t, size>;
+
+        message_type  type;
         std::uint16_t extra;
         std::uint32_t seq_no;
         std::uint32_t flags;
@@ -24,7 +30,8 @@ namespace ezsrv::net {
                            request_message_header &out);
     };
 
-    static_assert(sizeof(request_message_header) == header_size);
+    static_assert(sizeof(request_message_header) ==
+                  request_message_header::size);
 } // namespace ezsrv::net
 
 #endif /* EZSRV_NET_MESSAGE_HEADER */

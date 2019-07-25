@@ -13,7 +13,6 @@
 #include <cstdio>
 #include <cstring>
 
-using ezsrv::net::header_size;
 using ezsrv::net::request_message_header;
 using ezsrv::net::tcp_client;
 
@@ -38,7 +37,7 @@ void tcp_client::read_next(std::size_t bytes) {
 void tcp_client::start() {
     if (state() == client_state::idle) {
         state(client_state::reading_header);
-        read_next(header_size);
+        read_next(request_message_header::size);
     } else {
         throw std::runtime_error {"Client was already started!"};
     }
@@ -50,12 +49,12 @@ void tcp_client::close() {
 }
 
 void tcp_client::on_reading_header(std::string_view msg) {
-    if (msg.length() != ezsrv::net::header_size) {
+    if (msg.length() != request_message_header::size) {
         throw std::runtime_error {"Got invalid header length!"};
     }
 
-    std::array<std::uint8_t, ezsrv::net::header_size> buff {};
-    std::memcpy(buff.data(), tmp_buffer_.data(), ezsrv::net::header_size);
+    std::array<std::uint8_t, request_message_header::size> buff {};
+    std::memcpy(buff.data(), tmp_buffer_.data(), request_message_header::size);
 
     request_message_header header {};
     request_message_header::decode(buff, header);
@@ -73,7 +72,7 @@ void tcp_client::on_reading_body(std::string_view msg) {
             shared_from_this(),
             {std::move(reading_ctx_.header()), std::move(reading_ctx_.body())});
         state(client_state::reading_header);
-        read_next(header_size);
+        read_next(request_message_header::size);
     } else {
         read_next(reading_ctx_.next_chunk_size());
     }
