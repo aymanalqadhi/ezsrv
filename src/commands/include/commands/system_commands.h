@@ -6,6 +6,7 @@
 #include <cstring>
 
 #include <map>
+#include <memory>
 #include <string_view>
 
 namespace ezsrv::commands {
@@ -18,10 +19,14 @@ namespace ezsrv::commands {
 
     class system_commands_container {
       public:
-        system_command &get_command(system_commands command);
+        system_commands_container();
+        system_commands_container(const system_commands_container&) = delete;
+
+        const std::shared_ptr<system_command> &
+        get_command(system_commands command);
 
       private:
-        std::map<system_commands, system_command> commands_;
+        std::map<system_commands, std::shared_ptr<system_command>> commands_;
     };
 } // namespace ezsrv::commands
 
