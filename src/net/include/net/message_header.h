@@ -1,5 +1,5 @@
-#ifndef EZSRV_NET_MESSAGE_HEADER
-#define EZSRV_NET_MESSAGE_HEADER
+#ifndef EZSRV_NET_MESSAGE_HEADER_H
+#define EZSRV_NET_MESSAGE_HEADER_H
 
 #include <cstddef>
 #include <cstdint>
@@ -54,4 +54,4 @@ namespace ezsrv::net {
                   response_message_header::size);
 } // namespace ezsrv::net
 
-#endif /* EZSRV_NET_MESSAGE_HEADER */
+#endif /* EZSRV_NET_MESSAGE_HEADER_H */
