@@ -102,10 +102,9 @@ void tcp_client::send_enqueued() {
         send_buffers[0] = boost::asio::buffer(header_buffer);
         send_buffers[1] = boost::asio::buffer(msg_ptr->body);
 
-        sock_.async_send(boost::asio::buffer(send_buffers),
-                         boost::bind(&tcp_client::handle_send,
-                                     shared_from_this(), bytes_transferred,
-                                     error));
+        sock_.async_send(send_buffers, boost::bind(&tcp_client::handle_send,
+                                                   shared_from_this(),
+                                                   bytes_transferred, error));
     }
 
     send_queue_.clear();
