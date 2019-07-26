@@ -1,9 +1,10 @@
 #include "config/app_config.h"
-#include "data/sources/ezsrv_data_source.h"
-#include "data/sources/memory_ezsrv_data_source.h"
 
 #include "ezsrv_app.h"
 #include "iapplication.h"
+
+#include "data/sources/ezsrv_data_source.h"
+#include "data/sources/memory_ezsrv_data_source.h"
 
 #include "boost/di.hpp"
 
