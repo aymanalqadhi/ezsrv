@@ -8,9 +8,8 @@
 
 namespace ezsrv::net {
     enum class message_type : std::uint16_t {
-        ping           = 0,
-        system_command = 1,
-        custom_command = 2,
+        system_command = 0,
+        custom_command = 1,
     };
 
     struct request_message_header {
