@@ -12,13 +12,14 @@ set(EXECUTABLE_OUTPUT_PATH bin)
 set(LIBRARY_OUTPUT_PATH lib)
 
 # Sub directories inclusion
+add_subdirectory(lib)
 add_subdirectory(config)
 add_subdirectory(log)
 add_subdirectory(data)
 add_subdirectory(net)
+add_subdirectory(commands)
 add_subdirectory(app)
 add_subdirectory(main)
-add_subdirectory(lib)
 
 # Final executable
 add_executable(${PROJECT_NAME} $<TARGET_OBJECTS:ezsrv_main>)
