@@ -1,3 +1,5 @@
+#include "commands/system_commands.h"
+
 #include "net/message.h"
 #include "net/server.h"
 #include "net/tcp_client.h"
@@ -5,11 +7,18 @@
 #include "boost/asio/io_context.hpp"
 #include "boost/system/error_code.hpp"
 
-using tcp_client_ptr = std::shared_ptr<ezsrv::net::tcp_client>;
+#include <type_traits>
+
+using ezsrv::commands::result_code;
+using ezsrv::commands::system_commands;
+
+using ezsrv::net::response_message;
 using ezsrv::net::server;
 
 using boost::asio::io_context;
 using boost::system::error_code;
+
+using tcp_client_ptr = std::shared_ptr<ezsrv::net::tcp_client>;
 
 void server::run() {
     logger_.info("Starting Listener");
@@ -30,7 +39,33 @@ void server::on_client_accepted(tcp_client_ptr client) {
 }
 
 void server::on_request(const tcp_client_ptr &client, request_message req) {
-    logger_.info("Got message from client #{}: {}", client->id(), req.body);
+    // TODO:
+    // 1. Validate the command existance
+    // 2. Send real flags
+    // 2. Handle the rest of request types
+
+    switch (req.header.type) {
+    case message_type::system_command: {
+        auto cmd {system_commands_.get_command(
+            static_cast<system_commands>(req.header.extra))};
+        auto cmd_ret {std::invoke(*cmd, req.body)};
+
+        response_message_header header {
+            req.header.type,
+            static_cast<std::underlying_type_t<result_code>>(cmd_ret.code),
+            req.header.seq_no, 0,
+            static_cast<std::uint32_t>(cmd_ret.message.size())};
+
+        client->enqueue_send(
+            std::shared_ptr<response_message>(new response_message {
+                std::move(header), std::move(cmd_ret.message)}));
+        client->send_enqueued();
+
+        break;
+    }
+    default:
+        logger_.info("Got message from client #{}: {}", client->id(), req.body);
+    }
 }
 
 void server::on_error(const tcp_client_ptr &client, const error_code &err) {
