@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.10)
 project(ezsrv_commands)
 
 # Files
-set(SOURCE_FILES)
+set(SOURCE_FILES src/echo_command.cpp src/system_commands.cpp)
 
 # Targets
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
