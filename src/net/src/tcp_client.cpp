@@ -14,6 +14,8 @@
 #include <cstring>
 
 using ezsrv::net::request_message_header;
+using ezsrv::net::response_message;
+using ezsrv::net::response_message_header;
 using ezsrv::net::tcp_client;
 
 using boost::asio::transfer_exactly;
@@ -86,17 +88,26 @@ inline void tcp_client::on_error(const error_code &err) {
     }
 }
 
-void tcp_client::enqueue_send(std::shared_ptr<std::string> msg) {
+void tcp_client::enqueue_send(std::shared_ptr<response_message> msg) {
     send_queue_.emplace_back(std::move(msg));
 }
 
 void tcp_client::send_enqueued() {
+    std::array<std::uint8_t, response_message_header::size> header_buffer;
+    std::array<boost::asio::const_buffer, 2>                send_buffers;
+
     for (const auto &msg_ptr : send_queue_) {
-        sock_.async_send(boost::asio::buffer(*msg_ptr),
+        response_message_header::encode(msg_ptr->header, header_buffer);
+
+        send_buffers[0] = boost::asio::buffer(header_buffer);
+        send_buffers[1] = boost::asio::buffer(msg_ptr->body);
+
+        sock_.async_send(boost::asio::buffer(send_buffers),
                          boost::bind(&tcp_client::handle_send,
                                      shared_from_this(), bytes_transferred,
                                      error));
     }
+
     send_queue_.clear();
 }
 
