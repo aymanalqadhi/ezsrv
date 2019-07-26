@@ -2,8 +2,8 @@
 #define EZSRV_NET_TCP_CLIENT_H
 
 #include "net/client_state_machine.h"
-#include "net/reading_context.h"
 #include "net/message.h"
+#include "net/reading_context.h"
 
 #include "boost/asio/ip/tcp.hpp"
 #include "boost/asio/streambuf.hpp"
@@ -49,7 +49,7 @@ namespace ezsrv::net {
             void start();
             void close();
 
-            void enqueue_send(std::shared_ptr<std::string> msg);
+            void enqueue_send(std::shared_ptr<response_message> msg);
             void send_enqueued();
 
             inline std::uint32_t id() const noexcept { return id_; }
@@ -78,8 +78,8 @@ namespace ezsrv::net {
             reading_context reading_ctx_;
             tcp::socket     sock_;
 
-            std::vector<std::shared_ptr<std::string>> send_queue_;
-            const client_callbacks &                  callbacks_;
+            std::vector<std::shared_ptr<response_message>> send_queue_;
+            const client_callbacks &                       callbacks_;
 
             std::uint32_t id_;
         };
