@@ -57,11 +57,11 @@ namespace ezsrv::net {
           private:
             io_context io_ctx_;
 
-            client_callbacks          callbacks_;
-            tcp_listener              listener_;
-            system_commands_container system_commands_;
-            const app_config &        config_;
-            logger &                  logger_;
+            client_callbacks           callbacks_;
+            tcp_listener               listener_;
+            const app_config &         config_;
+            logger &                   logger_;
+            system_commands_container &system_commands_;
 
             std::atomic_bool                                  is_running_;
             std::unordered_map<std::uint32_t, tcp_client_ptr> clients_;
