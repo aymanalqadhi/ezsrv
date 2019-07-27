@@ -54,6 +54,9 @@ namespace ezsrv::net {
             void on_error(const tcp_client_ptr &client, const error_code &err);
             void on_close(const tcp_client_ptr &client);
 
+            void handle_system_command(const tcp_client_ptr & client,
+                                       const request_message &msg);
+
           private:
             io_context io_ctx_;
 
