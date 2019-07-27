@@ -14,7 +14,7 @@ namespace ezsrv::net {
 
     struct response_message {
         response_message_header header;
-        std::string body;
+        std::string body {};
     };
 } // namespace ezsrv::net
 
