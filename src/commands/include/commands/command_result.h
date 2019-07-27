@@ -5,15 +5,15 @@
 #include <string>
 
 namespace ezsrv::commands {
-    enum class result_code : std::uint16_t {
-        success           = 0,
-        unknown_error     = 1,
-        permission_denied = 2
+    enum class system_command_error : std::uint16_t {
+        success         = 0,
+        unknown_command = 1,
+        unknown_error   = 2
     };
 
-    struct command_result {
-        result_code code;
-        std::string message;
+    struct system_command_result {
+        system_command_error code;
+        std::string          message;
     };
 } // namespace ezsrv::commands
 

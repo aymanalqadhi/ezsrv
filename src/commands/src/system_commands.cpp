@@ -17,5 +17,8 @@ system_commands_container::system_commands_container() {
 
 const system_command_ptr &
 system_commands_container::get_command(system_commands cmd) {
-    return commands_[cmd];
+    static system_command_ptr null_cmd {nullptr};
+    auto cmd_itr = commands_.find(cmd);
+
+    return cmd_itr != commands_.end() ? cmd_itr->second : null_cmd;
 }

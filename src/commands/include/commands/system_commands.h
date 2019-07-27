@@ -14,7 +14,7 @@ namespace ezsrv::commands {
 
     class system_command {
       public:
-        virtual command_result operator()(std::string_view msg) = 0;
+        virtual system_command_result operator()(std::string_view msg) = 0;
     };
 
     class system_commands_container {

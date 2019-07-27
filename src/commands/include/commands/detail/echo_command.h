@@ -5,7 +5,7 @@
 
 namespace ezsrv::commands::detail {
     class echo_command final : public ezsrv::commands::system_command {
-        ezsrv::commands::command_result
+        ezsrv::commands::system_command_result
         operator()(std::string_view msg) override final;
     };
 } // namespace ezsrv::commands::detail

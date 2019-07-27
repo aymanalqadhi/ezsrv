@@ -3,10 +3,10 @@
 #include <string>
 #include <string_view>
 
-using ezsrv::commands::command_result;
-using ezsrv::commands::result_code;
+using ezsrv::commands::system_command_error;
+using ezsrv::commands::system_command_result;
 using ezsrv::commands::detail::echo_command;
 
-command_result echo_command::operator()(std::string_view msg) {
-    return {result_code::success, std::string {msg}};
+system_command_result echo_command::operator()(std::string_view msg) {
+    return {system_command_error::success, std::string {msg}};
 }
