@@ -1,6 +1,7 @@
 #include "net/server.h"
 
 using ezsrv::commands::system_command_error;
+using ezsrv::commands::system_command_result;
 using ezsrv::commands::system_commands;
 
 using ezsrv::net::message_type;
@@ -15,27 +16,29 @@ void server::handle_system_command(const tcp_client_ptr & client,
         static_cast<system_commands>(req.header.extra))};
 
     if (cmd != nullptr) {
-        auto cmd_ret {std::invoke(*cmd, req.body)};
+        system_command_result cmd_ret {std::invoke(*cmd, req.body)};
+        auto                  response =
+            std::make_shared<response_message>(std::move(cmd_ret.message));
 
-        response_message_header header {
-            message_type::system_command,
+        response->type(message_type::system_command);
+        response->code(
             static_cast<std::underlying_type_t<system_command_error>>(
-                cmd_ret.code),
-            req.header.seq_no, 0,
-            static_cast<std::uint32_t>(cmd_ret.message.size())};
+                cmd_ret.code));
+        response->sequence_no(req.header.seq_no);
+        response->flags(0);
 
-        client->enqueue_send(
-            std::shared_ptr<response_message>(new response_message {
-                std::move(header), std::move(cmd_ret.message)}));
+        client->enqueue_send(std::move(response));
     } else {
-        response_message_header header {
-            message_type::system_command,
-            static_cast<std::underlying_type_t<system_command_error>>(
-                system_command_error::unknown_command),
-            req.header.seq_no, 0, 0};
+        auto response = std::make_shared<response_message>();
 
-        client->enqueue_send(std::shared_ptr<response_message>(
-            new response_message {std::move(header)}));
+        response->type(message_type::system_command);
+        response->code(
+            static_cast<std::underlying_type_t<system_command_error>>(
+                system_command_error::unknown_command));
+        response->sequence_no(req.header.seq_no);
+        response->flags(0);
+
+        client->enqueue_send(std::move(response));
     }
 
     client->send_enqueued();

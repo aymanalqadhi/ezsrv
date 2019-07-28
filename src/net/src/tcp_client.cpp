@@ -97,10 +97,10 @@ void tcp_client::send_enqueued() {
     std::array<boost::asio::const_buffer, 2>                send_buffers;
 
     for (const auto &msg_ptr : send_queue_) {
-        response_message_header::encode(msg_ptr->header, header_buffer);
+        response_message_header::encode(msg_ptr->header(), header_buffer);
 
         send_buffers[0] = boost::asio::buffer(header_buffer);
-        send_buffers[1] = boost::asio::buffer(msg_ptr->body);
+        send_buffers[1] = boost::asio::buffer(msg_ptr->body());
 
         sock_.async_send(send_buffers, boost::bind(&tcp_client::handle_send,
                                                    shared_from_this(),
