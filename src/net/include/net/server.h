@@ -50,7 +50,7 @@ namespace ezsrv::net {
 
           private:
             void on_client_accepted(tcp_client_ptr client);
-            void on_request(const tcp_client_ptr &client, request_message msg);
+            void on_request(const tcp_client_ptr &client, request_message&& msg);
             void on_error(const tcp_client_ptr &client, const error_code &err);
             void on_close(const tcp_client_ptr &client);
 

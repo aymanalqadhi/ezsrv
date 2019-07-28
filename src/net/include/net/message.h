@@ -7,9 +7,30 @@
 #include <string_view>
 
 namespace ezsrv::net {
-    struct request_message {
-        request_message_header header;
-        std::string_view       body;
+    class request_message {
+      public:
+        request_message(const request_message_header &header,
+                        std::string_view              body)
+            : header_ {header}, body_ {std::move(body)} {}
+        request_message(request_message_header &&header,
+                        std::string_view &&      body)
+            : header_ {std::move(header)}, body_ {std::move(body)} {}
+
+        inline message_type  type() const noexcept { return header_.type; }
+        inline std::uint32_t extra() const noexcept { return header_.extra; }
+        inline std::uint32_t flags() const noexcept { return header_.flags; }
+        inline std::uint32_t sequence_no() const noexcept {
+            return header_.seq_no;
+        }
+        inline std::uint32_t body_size() const noexcept {
+            return header_.body_size;
+        }
+        const request_message_header header() const noexcept { return header_; }
+        const std::string_view &     body() const noexcept { return body_; }
+
+      private:
+        request_message_header header_;
+        std::string_view       body_;
     };
 
     class response_message {
@@ -23,9 +44,7 @@ namespace ezsrv::net {
             header_.body_size = static_cast<std::uint32_t>(body_.size());
         }
 
-        response_message() : body_ {} {
-            header_.body_size = 0;
-        };
+        response_message() : body_ {} { header_.body_size = 0; };
 
         inline message_type  type() const noexcept { return header_.type; }
         inline std::uint32_t code() const noexcept { return header_.code; }

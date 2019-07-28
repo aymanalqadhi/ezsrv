@@ -38,15 +38,16 @@ void server::on_client_accepted(tcp_client_ptr client) {
     clients_.emplace(std::make_pair(client->id(), std::move(client)));
 }
 
-void server::on_request(const tcp_client_ptr &client, request_message req) {
+void server::on_request(const tcp_client_ptr &client, request_message &&req) {
     // TODO:
     // - Handle the rest of request types
-    switch (req.header.type) {
+    switch (req.type()) {
     case message_type::system_command:
         handle_system_command(client, req);
         break;
     default:
-        logger_.info("Got message from client #{}: {}", client->id(), req.body);
+        logger_.info("Got message from client #{}: {}", client->id(),
+                     req.body());
     }
 }
 

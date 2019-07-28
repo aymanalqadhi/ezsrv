@@ -13,10 +13,10 @@ void server::handle_system_command(const tcp_client_ptr & client,
     // TODO:
     // - Send real flags
     auto cmd {system_commands_.get_command(
-        static_cast<system_commands>(req.header.extra))};
+        static_cast<system_commands>(req.extra()))};
 
     if (cmd != nullptr) {
-        system_command_result cmd_ret {std::invoke(*cmd, req.body)};
+        system_command_result cmd_ret {std::invoke(*cmd, req.body())};
         auto                  response =
             std::make_shared<response_message>(std::move(cmd_ret.message));
 
@@ -24,7 +24,7 @@ void server::handle_system_command(const tcp_client_ptr & client,
         response->code(
             static_cast<std::underlying_type_t<system_command_error>>(
                 cmd_ret.code));
-        response->sequence_no(req.header.seq_no);
+        response->sequence_no(req.sequence_no());
         response->flags(0);
 
         client->enqueue_send(std::move(response));
@@ -35,7 +35,7 @@ void server::handle_system_command(const tcp_client_ptr & client,
         response->code(
             static_cast<std::underlying_type_t<system_command_error>>(
                 system_command_error::unknown_command));
-        response->sequence_no(req.header.seq_no);
+        response->sequence_no(req.sequence_no());
         response->flags(0);
 
         client->enqueue_send(std::move(response));
