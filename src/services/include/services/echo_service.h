@@ -9,16 +9,18 @@
 
 namespace ezsrv::services {
     class echo_service final : public service_base {
+        static constexpr bool required {true};
         static constexpr auto name {"Echo Service"};
 
       public:
-        std::string_view display_name() const noexcept override final {
-            return name;
-        }
-        bool is_required() const noexcept override final { return true; }
+        echo_service() : service_base(required, name) {}
+
         void initialize() override final {
+            // Simulate initialization
             std::this_thread::sleep_for(std::chrono::seconds(3));
         }
+
+        inline const std::string &echo(const std::string &str) { return str; }
     };
 } // namespace ezsrv::services
 
