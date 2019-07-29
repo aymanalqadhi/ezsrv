@@ -15,8 +15,12 @@ using ezsrv::services::system_services_container;
 system_commands_container::system_commands_container(
     system_services_container &system_services)
     : system_services_ {system_services} {
-    commands_.emplace(std::make_pair(system_commands::echo_command,
-                                     std::make_shared<echo_command>()));
+
+    auto echo_cmd =
+        std::make_shared<echo_command>(system_services_.echo_service());
+
+    commands_.emplace(
+        std::make_pair(system_commands::echo_command, std::move(echo_cmd)));
 }
 
 const system_command_ptr &
