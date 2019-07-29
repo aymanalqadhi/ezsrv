@@ -1,6 +1,8 @@
 #include "services/echo_service.h"
 
 #include <chrono>
+#include <string>
+#include <string_view>
 #include <thread>
 
 using ezsrv::services::echo_service;
@@ -10,6 +12,6 @@ bool echo_service::initialize() {
     return true;
 }
 
-const std::string &echo_service::echo(const std::string &str) {
-    return str;
+std::string echo_service::echo(const std::string_view &str) {
+    return std::string {str};
 }

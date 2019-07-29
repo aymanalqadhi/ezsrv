@@ -14,7 +14,7 @@ namespace ezsrv::services {
         echo_service() : service_base(required, name) {}
         bool initialize() override final;
 
-        const std::string &echo(const std::string &str);
+        std::string echo(const std::string_view &str);
     };
 } // namespace ezsrv::services
 
