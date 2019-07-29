@@ -3,7 +3,7 @@
 
 #include "commands/system_commands.h"
 
-namespace ezsrv::commands::detail {
+namespace ezsrv::commands {
     class echo_command final : public ezsrv::commands::system_command {
         ezsrv::commands::system_command_result
         operator()(std::string_view msg) override final;

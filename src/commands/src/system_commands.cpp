@@ -1,4 +1,4 @@
-#include "commands/detail/echo_command.h"
+#include "commands/echo_command.h"
 #include "commands/system_commands.h"
 
 #include "services/system_services_container.h"
@@ -6,9 +6,9 @@
 using ezsrv::commands::system_command;
 using ezsrv::commands::system_commands;
 using ezsrv::commands::system_commands_container;
-using ezsrv::commands::detail::echo_command;
-
 using system_command_ptr = std::shared_ptr<system_command>;
+
+using ezsrv::commands::echo_command;
 
 using ezsrv::services::system_services_container;
 
