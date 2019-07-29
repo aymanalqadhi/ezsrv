@@ -6,8 +6,8 @@
 namespace ezsrv::services {
     class service_base {
       public:
-        virtual const std::string_view &display_name() const noexcept = 0;
-        virtual bool                    is_required() const noexcept  = 0;
+        virtual std::string_view display_name() const noexcept = 0;
+        virtual bool             is_required() const noexcept  = 0;
 
         virtual void initialize() = 0;
     };
