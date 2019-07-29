@@ -6,8 +6,8 @@
 #include "config/app_config.h"
 #include "log/logger.h"
 
-#include "services/system_services_container.h"
 #include "commands/system_commands.h"
+#include "services/system_services_container.h"
 
 #include "net/server.h"
 
@@ -16,6 +16,7 @@ namespace ezsrv::app {
         using ezsrv::config::app_config;
         using ezsrv::log::logger;
         using ezsrv::net::server;
+        using ezsrv::services::system_services_container;
 
         using ezsrv::commands::system_commands_container;
         using ezsrv::services::system_services_container;

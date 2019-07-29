@@ -10,23 +10,22 @@
 
 namespace ezsrv::services {
     namespace detail {
-        using ezsrv::services::echo_service;
+        namespace svcs = ezsrv::services;
         class system_services_container {
           public:
-            system_services_container(ezsrv::log::logger &          logger,
-                                      ezsrv::services::echo_service echo_svc)
-                : logger_ {logger}, echo_service_ {std::move(echo_svc)} {}
+            system_services_container(ezsrv::log::logger &logger,
+                                      svcs::echo_service  echo_service)
+                : logger_ {logger}, echo_service_ {std::move(echo_service)} {}
 
             bool initialize();
 
-            inline const ezsrv::services::echo_service &echo_service() const
-                noexcept {
+            inline const svcs::echo_service &echo_service() const noexcept {
                 return echo_service_;
             }
 
           private:
-            ezsrv::log::logger &   logger_;
-            services::echo_service echo_service_;
+            ezsrv::log::logger &logger_;
+            svcs::echo_service  echo_service_;
 
             std::atomic_bool inited_ {false};
         };
