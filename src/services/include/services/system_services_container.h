@@ -19,7 +19,8 @@ namespace ezsrv::services {
 
             bool initialize();
 
-            inline const echo_service &echo_service() const noexcept {
+            inline const ezsrv::services::echo_service &echo_service() const
+                noexcept {
                 return echo_service_;
             }
 
