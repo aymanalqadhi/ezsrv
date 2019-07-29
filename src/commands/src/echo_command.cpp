@@ -8,5 +8,5 @@ using ezsrv::commands::system_command_result;
 using ezsrv::commands::echo_command;
 
 system_command_result echo_command::operator()(std::string_view msg) {
-    return {system_command_error::success, std::string {msg}};
+    return {system_command_error::success, echo_service_.echo(msg)};
 }
