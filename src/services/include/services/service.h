@@ -12,7 +12,7 @@ namespace ezsrv::services {
         inline std::string_view display_name() const noexcept { return name_; }
         inline bool is_required() const noexcept { return required_; }
 
-        virtual void initialize() = 0;
+        virtual bool initialize() = 0;
 
       private:
         bool        required_;
