@@ -3,9 +3,7 @@
 
 #include "services/service.h"
 
-#include <chrono>
 #include <string_view>
-#include <thread>
 
 namespace ezsrv::services {
     class echo_service final : public service_base {
@@ -14,13 +12,9 @@ namespace ezsrv::services {
 
       public:
         echo_service() : service_base(required, name) {}
+        bool initialize() override final;
 
-        void initialize() override final {
-            // Simulate initialization
-            std::this_thread::sleep_for(std::chrono::seconds(3));
-        }
-
-        inline const std::string &echo(const std::string &str) { return str; }
+        const std::string &echo(const std::string &str);
     };
 } // namespace ezsrv::services
 
