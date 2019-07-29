@@ -1,5 +1,5 @@
-#ifndef EZSRV_APP_SYSTEM_SERVICES_CONTAINER_H
-#define EZSRV_APP_SYSTEM_SERVICES_CONTAINER_H
+#ifndef EZSRV_SERVICES_SYSTEM_SERVICES_CONTAINER_H
+#define EZSRV_SERVICES_SYSTEM_SERVICES_CONTAINER_H
 
 #include "log/logger.h"
 
@@ -8,7 +8,7 @@
 
 #include <atomic>
 
-namespace ezsrv::app {
+namespace ezsrv::services {
     namespace detail {
         namespace svcs = ezsrv::services;
         class system_services_container {
@@ -31,6 +31,6 @@ namespace ezsrv::app {
         };
     } // namespace detail
     using detail::system_services_container;
-} // namespace ezsrv::app
+} // namespace ezsrv::services
 
-#endif /* EZSRV_APP_SYSTEM_SERVICES_CONTAINER_H */
+#endif /* EZSRV_SERVICES_SYSTEM_SERVICES_CONTAINER_H */
