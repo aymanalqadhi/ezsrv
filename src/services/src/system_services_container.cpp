@@ -1,4 +1,4 @@
-#include "system_services_container.h"
+#include "services/system_services_container.h"
 
 #include "services/echo_service.h"
 #include "services/service.h"
@@ -7,7 +7,7 @@
 #include <stdexcept>
 #include <vector>
 
-using ezsrv::app::system_services_container;
+using ezsrv::services::system_services_container;
 
 bool system_services_container::initialize() {
     if (inited_) {

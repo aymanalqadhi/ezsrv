@@ -2,20 +2,23 @@
 #define EZSRV_APP_EZSRV_APP_H
 
 #include "iapplication.h"
-#include "system_services_container.h"
 
 #include "config/app_config.h"
 #include "log/logger.h"
 
+#include "services/system_services_container.h"
 #include "commands/system_commands.h"
+
 #include "net/server.h"
 
 namespace ezsrv::app {
     namespace details {
-        using ezsrv::commands::system_commands_container;
         using ezsrv::config::app_config;
         using ezsrv::log::logger;
         using ezsrv::net::server;
+
+        using ezsrv::commands::system_commands_container;
+        using ezsrv::services::system_services_container;
 
         class ezsrv_app final : public iapplication {
           public:
