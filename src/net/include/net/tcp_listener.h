@@ -36,7 +36,8 @@ namespace ezsrv::net {
                          const client_callbacks &callbacks,
                          const app_config &      config,
                          logger &                logger)
-                : callbacks_ {callbacks},
+                : io_ctx_ {io_ctx},
+                  callbacks_ {callbacks},
                   config_ {config},
                   logger_ {logger},
                   acceptor_ {io_ctx, get_endpoint(config)},
@@ -66,6 +67,7 @@ namespace ezsrv::net {
             void accept_next();
             void handle_accept(tcp_client_ptr client, const error_code &err);
 
+            io_context &            io_ctx_;
             const client_callbacks &callbacks_;
             const app_config &      config_;
             logger &                logger_;

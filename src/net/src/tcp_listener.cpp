@@ -35,7 +35,7 @@ void tcp_listener::accept_next() {
     }
 
     auto client_ptr {std::make_shared<tcp_client>(
-        tcp::socket {acceptor_.get_io_context()}, callbacks_)};
+        tcp::socket {io_ctx_}, callbacks_)};
 
     acceptor_.async_accept(
         client_ptr->socket(),
